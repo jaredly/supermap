@@ -22296,7 +22296,7 @@ d3plus.shape.draw = function(vars) {
               source = l[vars.edges.source][vars.id.value],
               target = l[vars.edges.target][vars.id.value]
 
-          if (source == id || target == id) {
+          if (source == id || target == id || d.connections.indexOf(target) !== -1) {
             var elem = vars.g.edge_hover.node().appendChild(this.cloneNode(true))
             d3.select(elem).datum(l).attr("opacity",1)
               .selectAll("line, path").datum(l)
@@ -25843,6 +25843,9 @@ d3plus.visualization.network = function(vars) {
   var max_size = d3.min(d3plus.util.distances(nodes))
 
   max_size = max_size * vars.nodes.overlap
+  if (!max_size) {
+    max_size = .5
+  }
 
   if (vars.edges.arrows.value) {
     max_size = max_size * 0.5
@@ -25870,6 +25873,8 @@ d3plus.visualization.network = function(vars) {
     }
 
   }
+  max_size = .5
+  min_size = .1
 
   // Create size scale
   var radius = vars.size.scale.value
