@@ -16,7 +16,7 @@ for item in raw:
 
 front = {}
 for item in raw:
-    item['prereqs'] = [pre for pre in item['prereqs'] if pre in names]
+    item['prereqs'] = [pre.replace('.', '-') for pre in item['prereqs'] if pre.replace('.', '-') in names]
     for pre in item['prereqs']:
         if pre not in front:
             front[pre] = []
@@ -63,8 +63,8 @@ for item in raw:
     item['depth'] = depth[item['name']]
     item['end'] = not len(front.get(item['name'], []))
     item['start'] = not len(item['prereqs'])
-    item['x'] = item['h_position']
-    item['y'] = item['v_position']
+    item['x'] = item['v_position']
+    item['y'] = -item['h_position']
     item['connections'] =  weight[item['name']]
     for pre in item['prereqs']:
         pre = pre.replace('.', '-')
@@ -85,8 +85,8 @@ for item in raw:
         'name': item['name'],
         'label': item['display_name'],
         'display_name': item['display_name'],
-        'x': item['h_position'],
-        'y': item['v_position']
+        'x': item['x'],
+        'y': item['x']
     })
 
 open('./data.js', 'w').write('var data = ' + json.dumps({
